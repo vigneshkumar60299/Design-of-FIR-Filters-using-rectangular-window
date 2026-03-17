@@ -33,28 +33,36 @@ w = ones(1, N);
 
 h = hd .* w;
 
+
+n = 0:N-1;
+subplot(2,1,1);
+plot(n, h, 'o-');
+xlabel('n');
+ylabel('h(n)');
+title('Impulse Response (Rectangular Window)');
+xgrid();
+
 Nfft = 1024;
 h_padded = [h, zeros(1, Nfft - N)];
-
 H = fft(h_padded, -1);
 
 f = (0:Nfft-1) / Nfft;
 
+subplot(2,1,2);
 plot(f, abs(H));
 xlabel('Normalized Frequency');
 ylabel('Magnitude');
-title('Low Pass FIR Filter using Rectangular Window');
+title('Frequency Response (Rectangular Window)');
 xgrid();
-
 disp("Filter Coefficients:");
-disp(h);
+disp(h(:)');
 
 ```
 
 
 
 # OUTPUT
-<img width="1919" height="935" alt="Screenshot 2026-03-17 132811" src="https://github.com/user-attachments/assets/9e2440db-9412-40f3-95bc-b3640a892837" />
+<img width="1919" height="940" alt="Screenshot 2026-03-17 134511" src="https://github.com/user-attachments/assets/8051a09a-4dd1-47b7-a4c5-b727a1f3ed2d" />
 
 
 # RESULT
