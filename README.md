@@ -15,37 +15,46 @@ clc;
 clear;
 close;
 
-N = input("Enter filter length = ");
-wc = input("Enter cutoff frequency (in radians) = ");
+N = 41;                  
+wc = 0.4 * %pi;         
+alpha = (N - 1) / 2;    
 
-alpha = (N-1)/2;
-n = 0:N-1;
+hd = zeros(1, N);
 
-hd = zeros(1,N);
-for i = 1:N
-    if n(i) == alpha then
-        hd(i) = wc/%pi;
+for n = 0:N-1
+    if (n - alpha) == 0 then
+        hd(n+1) = wc / %pi;
     else
-        hd(i) = sin(wc*(n(i)-alpha))/(%pi*(n(i)-alpha));
+        hd(n+1) = sin(wc * (n - alpha)) / (%pi * (n - alpha));
     end
 end
 
-w = ones(1,N);
+w = ones(1, N);
+
 h = hd .* w;
 
-[H,f] = frmag(h,256);
-fn = f/%pi;
+Nfft = 1024;
+h_padded = [h, zeros(1, Nfft - N)];
 
-plot(fn,abs(H));
-xlabel("Normalized Frequency");
-ylabel("Magnitude");
-title("Frequency Response of FIR Filter using Rectangular Window");
+H = fft(h_padded, -1);
+
+f = (0:Nfft-1) / Nfft;
+
+plot(f, abs(H));
+xlabel('Normalized Frequency');
+ylabel('Magnitude');
+title('Low Pass FIR Filter using Rectangular Window');
+xgrid();
+
+disp("Filter Coefficients:");
+disp(h);
+
 ```
 
 
 
 # OUTPUT
-<img width="1918" height="945" alt="Screenshot 2026-03-12 140232" src="https://github.com/user-attachments/assets/2beaf14b-edfb-4b94-9eac-657147d0d22e" />
+<img width="1919" height="935" alt="Screenshot 2026-03-17 132811" src="https://github.com/user-attachments/assets/9e2440db-9412-40f3-95bc-b3640a892837" />
 
 
 # RESULT
